@@ -20,5 +20,3 @@ RUN poetry install --no-root
 COPY . .
 
 WORKDIR /app/crm_django_project
-
-EXPOSE 8000
