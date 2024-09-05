@@ -5,33 +5,7 @@ Pet project for practice in writing Python code, using relevant frameworks and l
 This project is a CRM system built with Django and uses a Telegram bot for user interaction. Celery is used for background tasks, and Redis is used as a message broker.
 Below is a block diagram illustrating the interaction between the system's components:
 
-```plantuml
-@startuml
-!theme reddress-darkred
-autonumber
-
-actor User
-participant "Telegram Bot" as TB
-participant "Django Web Application" as DWA
-queue "Redis (Broker)" as Redis
-participant "Celery (Background Tasks)" as Celery
-database "PostgreSQL (SQLAlchemy)" as DB
-
-User --> TB : Sends Request
-TB --> DWA : Sends User Command
-
-DWA --> DB : Reads/Writes Data
-DWA --> Redis : Sends Task to Queue
-
-Redis --> Celery : Delivers Task from Queue
-Celery --> DB : Accesses Database if needed
-Celery --> Redis : Sends Task Result to Queue
-Redis --> DWA : Delivers Task Result
-
-DWA --> TB : Response
-TB --> User : Show Response
-@enduml
-```
+![plantuml_architecture_schema](https://cdn-0.plantuml.com/plantuml/dpng/TP0nSy8m38Lt_mgLYGvSzmuz4Z9sA90UiuX5S1FRgMMtnx-l4kV8CNJ9nNwVzDxpbYE6c6oldkALB44WhGCnRpI6JWuAK_GksJC5fR29Fi0do_yWOwOn0xe8gvfwQWDQA7rS0JBKvIDGVQ5hFPpe3CKmzAR1QBoRqEfKgEz4YM1r86qOrcNm7ONdIPsk7dVjn2pS1CEcQuDFJaEDt74UoAhI6F6CB4i_FCSsq77_3clv57qZFMyPhagbnZQmsRn9PdY58pazkaeYZagkHaKYtgK9ttbhqMcbHCd4E7iWrFno2YQIh9O0TpaNcrTCQI5ws8-jbSgYO7DsuIhgpG-56Rq4RsSu4ujbqJJ4dEroNtC1HwH9p-n__WVYrCSbHaQMjak4XLxwrhal3zunpS-KdqPChlvtqRPYcMp_1m00)
 
 # System Components
 1. User: The user interacts with the system through a Telegram bot, sending requests to manage CRM data.
