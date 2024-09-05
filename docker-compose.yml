@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    command: >
+      sh -c "poetry run python manage.py migrate --noinput &&
+             poetry run python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+      - celery
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: crm_db
+      POSTGRES_USER: crm_user
+      POSTGRES_PASSWORD: password
+
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    command: poetry run celery -A crm_django_project worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - db
+
+volumes:
+  postgres_data:
